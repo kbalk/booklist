@@ -47,7 +47,7 @@ earlier versions of Pytest, but that has not been verified.
 * Pytest 3.0.5
 * PyYAML
 * Voluptuous (for validation of YAML data)
-* Request
+* Requests
 
 ### Unit tests
 
@@ -63,7 +63,7 @@ pytest --cov=booklist
 ## Configuration File
 
 The name of the YAML-formatted configuration file is a required argument
-to running the `booklist` script.  The format of this file is as follows:
+to running the `booklist` script.  The format is as follows:
 
 Tag   | Description
 ------------------|-----------------
@@ -86,9 +86,9 @@ Allowed media types:
 - DVD
 - Blu-Ray
 
-Note:  The media types may be in upper, lower or mixed case as the case
+Note:  The media types can be in upper, lower or mixed case as the case
 will be ignored.  Types that consist of more than one word may be enclosed
-in quotes or not; it doesn't matter.
+in quotes or not.
 
 Also, some media types are supersets, i.e., a type of 'book' includes
 'large print' books.  A type of 'electronic resource' includes 'ebook'.
@@ -101,10 +101,10 @@ Example configuration file:
 	authors:
 		- firstname: James
 		  lastname: Patterson
-		  media-type: eBook
+		  media-type: book on cd
 
-		- firstname: Alexander McCall
-	 	  lastname: Smith
+		- firstname: Alexander
+	 	  lastname: McCall Smith
 ```
 
 ## Usage
@@ -112,8 +112,8 @@ Example configuration file:
 ```sh
 Usage: booklist.py [-h] [-d] config_file
 
-Search a public library's catalog website for this year's books from
-authors listed in config file.
+Search a public library's catalog website for this year's publications
+from authors listed in the given config file.
 
 positional arguments:
   config_file  Config file containing library's catalog url and

@@ -59,7 +59,8 @@ def cmdline_parser():
     """
     parser = argparse.ArgumentParser(
         description=("Search a public library's catalog website for this "
-                     "year's books from authors listed in config file."))
+                     "year's publications from authors listed in the given "
+                     "config file."))
 
     parser.add_argument(
         'config_file',
