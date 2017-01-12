@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Automate search of a public library website to retrieve list of books.
+"""Automate search of public library website to retrieve list of publications.
 
-Takes a YAML file with the library's catalog URL and a list of authors and
+Takes a YAML file with the library's catalog URL and list of authors and
 issues the appropriate requests to that library's website for the latest
-books from those authors.  Currently only works for libraries using the
-CARL.X Integrated Library System (ILS).
+publications for those authors.  Currently only works for libraries using
+the CARL.X Integrated Library System (ILS).
 
 CARL.X ILS:
 --------------------------------------------------------------------------
-The CARL.X ILS is based on Web 2.0 technologies so the generated page is
-easier to parse than some of the library systems in the past.  It has an
-"open" API, but that API appears to be open only to paying customers, i.e.,
-the library staff.
+The CARL.X ILS is based on Web 2.0 technologies so its possible to issue
+the POST requests needed to obtain the number of expected publications
+and the list of those publications.  It has an "open" API, but that API
+appears to be open only to paying customers, i.e., the library staff.
 
 A request URL for CARL.X to search for a given book consists of an array of
 facetFilters.  You can filter on format  (media type), publication year,
@@ -30,8 +30,8 @@ Usage:
 --------------------------------------------------------------------------
 Usage: booklist.py [-h] [-d] config_file
 
-    Search a public library's catalog website for this year's books from
-    authors listed in config file.
+    Search a public library's catalog website for this year's publications
+    from authors listed in the given config file.
 
     positional arguments:
       config_file  Config file containing catalog url and list of authors
