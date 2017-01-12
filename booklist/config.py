@@ -3,10 +3,10 @@
 
 The Configurator class reads and validates the configuration file.  The
 configuration file contains:
-    - website URL for the library's catalog,
+    - URL for the library's catalog website,
     - optional default for desired media type ('Book' is assumed otherwise),
     - list of authors; each entry in the list must contain the author's first
-      and last name and optionally the desired media type for that author.
+      and last name, and optionally the desired media type for that author.
 
 The ConfigError class is used to report errors found in the configuration
 file.
@@ -60,10 +60,10 @@ Example YAML config file:
     authors:
         - firstname: James
           lastname: Patterson
-          media-type: eBook
+          media-type: book on cd
 
-        - firstname: Alexander McCall
-          lastname: Smith
+        - firstname: Alexander
+          lastname: McCall Smith
 """
 
 import logging
@@ -87,12 +87,7 @@ class ConfigError(Exception):
     Attributes:
        msg - description of type of error
     """
-    def __init__(self, msg):
-        super().__init__(msg)
-        self.msg = msg
-
-    def __str__(self):
-        return self.msg
+    pass
 
 
 class Configurator(object):
@@ -165,7 +160,7 @@ class Configurator(object):
             media_type (str):  one of the MEDIA_TYPES['configName'] values
 
         Returns:
-            str:  MEDIA_TYPES['FacetName'] equivalent to given media_type
+            str:  MEDIA_TYPES['FacetName'] equivalent for given media_type
 
         Raises:
             voluptuous.Invalid:  media_type is not one of the acceptable media
