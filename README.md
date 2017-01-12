@@ -5,32 +5,31 @@ public website and search for the latest books available from your favorite
 authors.  If your list of favorite authors is long, that's a tedious task
 even with saved searches.
 
-This script, 'booklist' can make that task easier by automating the task
-of determining whether the library has any new publications available for
-those authors.
+This script, 'booklist', can make that task easier by automating the task
+of determining whether the library has any new publications for those authors.
 
 However, this script will only work with libraries using the CARL.X
 Integrated Library System.  The GitHub repository for 'latest_books' contains
 a similar script written in Perl, but is designed to work with Horizon's
 Information Portal version 3.23_6380.
 
-The 'booklist' script works by accessing a given library's website using
-the appropriate POST requests, performing a search for each desired author
-and media type, then printing the results.  The library's catalog URL, list
-of authors and the desired media types is expected to be contained in a
-YAML file created by the user.
+'booklist' works by accessing a given library's website to search for
+publications from a given author and of a specific media type within the
+current year.  The results are printed to the console.  The search is
+repeated for each author listed in a configuration file.  The configuration
+file is in YAML format and also provides the library's catalog URL,
+default media type and any specific media types for authors.
 
-The default media type is 'book' and the default publication time period
-is the current year.  However, media with an unknown publication time
-period will also be returned in a search as the unknown time might include
-the current year.
+The publication time period will include publications with an unknown
+publication time as the unknown time might include the current year.
 
 ## Installation
 
 To install the latest release from github:
 
 ```sh
-pip install git+git://github.com/kbalk/booklist.git
+git clone https://github.com/kbalk/booklist.git && cd booklist
+python setup.py install
 ```
 
 Next, modify the default configuration file `sample_config`, which is
@@ -55,10 +54,6 @@ earlier versions of Pytest, but that has not been verified.
 Unit tests can be invoked using Pytest:
 
 ```sh
-# From the booklist root directory:
-pytest setup.py test
-
-# Or, once the package is installed, tests can be simply run by:
 pytest
 
 # Code coverage:
