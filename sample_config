@@ -1,0 +1,60 @@
+# ===================================================================
+# Sample configuration file for the 'booklist' script.
+#
+# The configuration file is expected to be in YAML format, which
+# consists of tags followed by values.  For lists, such as the one
+# for authors, each entry in the list is denoted by a leading dash ('-').
+# Values can be enclosed in single or double quotes, or the quotes
+# can be omitted.
+# ===================================================================
+
+# -------------------------------------------------------------------
+# [Required] catalog-url is the URL for the library catalog search
+# page.  It is most likely is not the same URL as for the library
+# home page.  Note that that URL must begin with the scheme, i.e.,
+# 'http' or 'https'.
+# -------------------------------------------------------------------
+catalog-url:  http://catalog.library.loudoun.gov/
+
+# -------------------------------------------------------------------
+# [Optional] This media-type specifies the default media-type used to
+# filter the search results.  If no default is specified, a default
+# type of 'book' will be used.  However, the default type can be
+# overridden for specific authors by specifying a media-type in the
+# authors list.  Valid media types are:
+#     book
+#     electronic resource
+#     ebook
+#     eaudiobook
+#     book on cd
+#     large print
+#     music cd
+#     dvd
+#     blu-ray
+# The media types can be in upper, lower or mixed case as the case
+# will be ignored.  Types that are more than one word can be enclosed
+# in quotes or not.
+#
+# Note that some media types are supersets, i.e., a type of 'book'
+# includes 'large print' books.  A type of 'electronic resource'
+# includes 'ebook'.
+# -------------------------------------------------------------------
+media-type:   book
+
+# -------------------------------------------------------------------
+# [Required] authors is the list of authors to search.  For each
+# author, a firstname and lastname is required.  An optional media-type
+# can be specified; if given, it will only be used to filter the
+# search results for that author.
+# -------------------------------------------------------------------
+authors:
+    - firstname:  James
+      lastname:   Patterson
+      media-type:  book on cd
+
+    - firstname:  Alexander
+      lastname:   McCall Smith
+
+# -------------------------------------------------------------------
+# End
+# -------------------------------------------------------------------
