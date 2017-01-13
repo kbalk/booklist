@@ -130,8 +130,8 @@ the distribution.  The format of the configuration file is described
 
 ## Limitations
 
-I wasn't able to determine the version of CARL.X that was in use for the
-library system used in my testing, but even so it appears the CARL.X is
-configurable for the types of filters and perhaps media types it will
-permit.  Therefore this script may not work for any given CARL.X ILS,
-but it's a start.
+I wasn't able to determine the version of CARL.X used in my testing,
+but even so it appears that CARL.X is configurable for the types of
+filters and media it will permit.  Therefore this script may not work
+for any given CARL.X ILS, but it can be used as a starting point
+for any needed modifications.
