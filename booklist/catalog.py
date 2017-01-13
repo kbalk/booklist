@@ -378,7 +378,7 @@ class CatalogSearch(object):
         """Set the filter value for the year to the given value.
 
         This function would primarily be of use for unit testing to ensure
-        that lots of books would be retrieved.
+        that a known set of books could be retrieved.
 
         Args:
            year_string (str):  New filter value for publication year.
