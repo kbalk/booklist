@@ -5,7 +5,7 @@ public website and search for the latest books available from your favorite
 authors.  If your list of favorite authors is long, that's a tedious task
 even with saved searches.
 
-This script, 'booklist', can make that task easier by automating the task
+This script, `booklist`, can make that task easier by automating the task
 of determining whether the library has any new publications for those authors.
 
 However, this script will only work with libraries using the CARL.X
@@ -13,15 +13,15 @@ Integrated Library System.  The GitHub repository for 'latest_books' contains
 a similar script written in Perl, but is designed to work with Horizon's
 Information Portal version 3.23_6380.
 
-'booklist' works by accessing a given library's website to search for
-publications from a given author and of a specific media type within the
+`booklist` works by accessing a given library's website to search for
+publications from a given author, of a specific media type and within the
 current year.  The results are printed to the console.  The search is
-repeated for each author listed in a configuration file.  The configuration
-file is in YAML format and also provides the library's catalog URL,
-default media type and any specific media types for authors.
+repeated for each author listed in a configuration file.
 
-The publication time period will include publications with an unknown
-publication time as the unknown time might include the current year.
+The configuration file is in YAML format and provides the library's
+catalog URL, default media type, authors and any specific media types
+for authors.  The publication time period includes publications with an
+unknown publication time as the unknown time might include the current year.
 
 ## Installation
 
@@ -32,11 +32,11 @@ git clone https://github.com/kbalk/booklist.git && cd booklist
 python setup.py install
 ```
 
-Next, modify the default configuration file `sample_config`, which is
-found in the same directory as this README.  In particular, the catlog-url
-and author list should be edited to specify the appropriate library and
-authors of interest.  Refer to the sections further on for details on the
-configuration file and instructions for running the script.
+After installation, modify the default configuration file `sample_config`,
+which is found in the same directory as this README.  In particular, the
+catlog-url and author list should be edited to specify the appropriate
+library and authors of interest.  Refer to the
+['Configuration File'](#configuration-file) section for further details.
 
 ### Prerequisites
 
@@ -124,6 +124,6 @@ optional arguments:
   -d, --debug  Print debug information to stdout
 ```
 
-A sample configuration file of `sample_config` has been provided with
+A sample configuration file named `sample_config` has been provided with
 the distribution.  The format of the configuration file is described
 [here](#configuration-file).
