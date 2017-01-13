@@ -127,3 +127,11 @@ optional arguments:
 A sample configuration file named `sample_config` has been provided with
 the distribution.  The format of the configuration file is described
 [here](#configuration-file).
+
+## Limitations
+
+I wasn't able to determine the version of CARL.X that was in use for the
+library system used in my testing, but even so it appears the CARL.X is
+configurable for the types of filters and perhaps media types it will
+permit.  Therefore this script may not work for any given CARL.X ILS,
+but it's a start.
