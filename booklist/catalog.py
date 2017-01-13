@@ -43,7 +43,7 @@ class CatalogSearch(object):
 
     To perform a search on the library's catalog, two types of requests
     are needed:  one to retrieve the total number of publications
-    available given set of filters, the other to retreive publication
+    available given a set of filters, the other to retreive publication
     information up to 'hitsPerPage' per request.
 
     These two requests are issued for the current year and again for
@@ -54,7 +54,7 @@ class CatalogSearch(object):
     TIMEOUT = 5
 
     # Used for 'cache busting'; in lieu of timezone information or
-    # microsecond precision an increment is needed.  See __timestamp().
+    # microsecond precision an increment is used.  See __timestamp().
     TIMESTAMP_INCREMENT = 1
 
     # Maximum number of publications returned in a response.
@@ -69,7 +69,6 @@ class CatalogSearch(object):
         Args:
           catalog_url (URI):  Valid URL string for the library's catalog.
           logger (logging instance):  caller's logger
-
         Raises:
           CatalogSearchError:  Invalid catalog_url provided as an argument.
         """
@@ -86,10 +85,9 @@ class CatalogSearch(object):
             requests_log.setLevel(logging.DEBUG)
             requests_log.propagate = True
 
-        # Save the catalog for use in logging.
         self._catalog_url = catalog_url
 
-        # Current year as a string; only needed for testing purposes.
+        # Current year as a string; used in filtering.
         self._year_filter = datetime.now().year
 
     @staticmethod
@@ -98,8 +96,9 @@ class CatalogSearch(object):
 
         With the CARL.X system, the parameter '_' in a request appears to
         contain a value used as a 'cache buster'.  A cache buster value
-        is checked to see if it's different from a prior request and if
-        so, then cached data is not used.
+        is checked to see if it's different from a prior request's value
+        and if so, then new data is retrieved rather than using cached
+        data.
 
         As the CARL.X system uses a 13-digit timestamp, so will we.  To
         get 13-digits, we multiply a timestamp by 1000.  That yields
@@ -108,12 +107,12 @@ class CatalogSearch(object):
 
         Args:
             None
-
         Returns:
             int:  13-digit unique value
         """
         CatalogSearch.TIMESTAMP_INCREMENT += 1
-        return int(mktime(gmtime()) * 1000) + CatalogSearch.TIMESTAMP_INCREMENT
+        return int(mktime(gmtime()) * 1000) + \
+                CatalogSearch.TIMESTAMP_INCREMENT
 
     def __issue_request(self, endpoint, author, filter_list):
         """Issues a POST request and tests for an error in the response.
@@ -125,17 +124,12 @@ class CatalogSearch(object):
             author (str):  author's name for use in filter.
             filter_list (list):  list of dictionaries containing filter
                                  information; this is specific to the request.
-
         Returns:
             requests.models.Response:  request's response
-
         Raises:
             CatalogSearchError:  request was bad, connnection failed or
                                  timed out.
         """
-
-        # Headers for a POST request related to a catalog search.  Note
-        # that the data specifying the search details will be in JSON format.
         headers = {
             'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/json; charset=utf-8',
@@ -182,17 +176,15 @@ class CatalogSearch(object):
         # Return a successful response.
         return response
 
-    def __get_publications_count(self, author, filter_list):
+    def __publications_count(self, author, filter_list):
         """Request total number of publications for the given author.
 
         Args:
             author (str):  author's name for use in filter.
             filter_list (list):  list of dictionaries containing filter
                                  information, e.g., year and media type.
-
         Returns:
             int:  total number of publications retrievable with given filter
-
         Raises:
             CatalogSearchError:  request failed or response was not in
                                  JSON format.
@@ -222,19 +214,17 @@ class CatalogSearch(object):
                           decoded_data['totalHits'])
         return decoded_data['totalHits']
 
-    def __get_publications(self, author, filter_list):
+    def __publications(self, author, filter_list):
         """Request a page of publications for the given author.
 
         Args:
             author (str):  author's name for use in filter.
             filter_list (list):  list of dictionaries containing filter
                                  information, e.g., year and media type.
-
         Returns:
             dictionary: information on all the publications matching the
                         filters.  The number returned will not exceed
                         CatalogSearch.MAX_HITS_PER_PAGE.
-
         Raises:
             CatalogSearchError:  request failed or response was not in
                                  JSON format.
@@ -255,6 +245,45 @@ class CatalogSearch(object):
                           format(decoded_data))
         return decoded_data["resources"]
 
+    @staticmethod
+    def __apply_local_filters(author, publications, filtered_results):
+        """Apply filters on publications that aren't performed in request
+
+        Filter more precisely on the author name as the search can sometimes
+        retrieve other publications that are not from the author.  Also,
+        as the author could be one of several authors for the publication,
+        an exact match shouldn't be performed on the name.
+
+        Additionally, check for missing dictionary values for title and
+        media type and use 'Unknown' as a replacement.
+
+        Args:
+            author (str):  author's name for use in filter.
+            publications (list of dicts):  list to be filtered
+            filtered_results (list of tuples):  publications that are not
+                filtered out will be appended to this list.
+        Returns:
+            None; filtered_results will be updated to contain
+            publications that were not excluded by the filters.
+        """
+        for publication in publications:
+            # Some books don't have authors - don't know why,
+            # but 'The Mystery Writers of America cookbook' is one
+            # of them; it shows up in a search for Sue Grafton.
+            if not publication['shortAuthor']:
+                continue
+
+            pub_format = 'Unknown'
+            if publication['format']:
+                pub_format = publication['format']
+
+            pub_title = 'Unknown'
+            if publication['shortTitle']:
+                pub_title = publication['shortTitle']
+
+            if author in publication['shortAuthor']:
+                filtered_results.append((pub_format, pub_title))
+
     def search(self, author, media_type):
         """Perform the catalog search and parse the response.
 
@@ -265,20 +294,20 @@ class CatalogSearch(object):
         Args:
             author (str):  author's name for use in filter.
             media_type (str):  type of media to filter on.
-
         Returns:
             list:  list of tuples containing the media type and publication
                    title for all publications in the current year or of an
                    unknown year.
-
         Raises:
             CatalogSearchError:  arguments were invalid, requests failed,
                                  responses were invalid or unexpected.
         """
         if not author or not media_type:
-            raise CatalogSearchError('Arguments must be non-null:  author={}, '
-                                     'media={}'.format(author, media_type))
+            raise CatalogSearchError(
+                'Arguments must be non-null:  author={}, media={}'.
+                format(author, media_type))
 
+        # Media type one of the acceptable types?
         try:
             media = Configurator.validate_media_type(media_type)
         except Invalid as exc:
@@ -301,8 +330,7 @@ class CatalogSearch(object):
             # Determine how many publications to expect so we know when
             # to stop issuing requests.
             try:
-                total_count = self.__get_publications_count(author,
-                                                            filter_list)
+                total_count = self.__publications_count(author, filter_list)
             except CatalogSearchError:
                 raise
 
@@ -314,34 +342,16 @@ class CatalogSearch(object):
             accumulated_count = 0
             while accumulated_count < total_count:
                 try:
-                    publications = self.__get_publications(author,
-                                                           filter_list)
+                    publications = self.__publications(author, filter_list)
                 except CatalogSearchError:
                     raise
 
-                # Update the count of retrieved publications
                 accumulated_count += len(publications)
 
-                # Filter more precisely on the author name.  The search
-                # can sometimes retrieve other publications that are not
-                # from the author.  Also, the author could be one of the
-                # authors, so don't look for an exact match on the name.
-                for publication in publications:
-                    # Some books don't have authors - don't know why,
-                    # but 'The Mystery Writers of America cookbook' is one
-                    # of them; it shows up in a search for Sue Grafton.
-                    if not publication['shortAuthor']:
-                        continue
-
-                    pub_format = 'Unknown'
-                    if publication['format']:
-                        pub_format = publication['format']
-                    pub_title = 'Unknown'
-                    if publication['shortTitle']:
-                        pub_title = publication['shortTitle']
-
-                    if author in publication['shortAuthor']:
-                        filtered_results.append((pub_format, pub_title))
+                # Apply additional filters that can't be handled in the
+                # POST request.
+                self.__apply_local_filters(author, publications,
+                                           filtered_results)
 
             # If we retrieve more publications than expected, raise an error.
             if accumulated_count > total_count:
@@ -358,7 +368,6 @@ class CatalogSearch(object):
         """Return current filter value for publication year.
         Args:
             None
-
         Returns:
             (str):  year currently used as a filter.
         """
@@ -373,7 +382,6 @@ class CatalogSearch(object):
 
         Args:
            year_string (str):  New filter value for publication year.
-
         Returns:
            None
         """
