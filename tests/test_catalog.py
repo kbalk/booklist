@@ -10,7 +10,7 @@ from booklist.catalog import CatalogSearch, CatalogSearchError
 
 @pytest.fixture
 def catalog_url(scope='module'):  #pylint: disable=unused-argument
-    return 'http://catalog.library.loudoun.gov'
+    return 'https://catalog.library.loudoun.gov'
 
 @pytest.fixture
 def sue_grafton_publications(scope='module'):

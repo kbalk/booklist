@@ -14,7 +14,7 @@
 # home page.  Note that that URL must begin with the scheme, i.e.,
 # 'http' or 'https'.
 # -------------------------------------------------------------------
-catalog-url:  http://catalog.library.loudoun.gov/
+catalog-url:  https://catalog.library.loudoun.gov/
 
 # -------------------------------------------------------------------
 # [Optional] This media-type specifies the default media-type used to

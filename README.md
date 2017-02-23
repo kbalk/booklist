@@ -40,14 +40,25 @@ library and authors of interest.  Refer to the
 
 ### Prerequisites
 
-This script was written using Python 3.5 and tested with Pytest 3.0.5.  It
-is possible that it will run on earlier versions of Python 3 or test with
-earlier versions of Pytest, but that has not been verified.
+This script was written using Python 3.5 and tested with Pytest 3.0.5.
 
 * Pytest 3.0.5
 * PyYAML
 * Voluptuous (for validation of YAML data)
 * Requests
+
+Python versions 3.3 and 3.4 will fail with a syntax error in main.py due to
+a restriction introduced in unpacking arguments.  That restriction was lifted
+in Python 3.5.  The synatax error is:  "only named arguments may follow
+\*expression" and can be fixed by changing the line:
+
+```python
+		print('  [{0:{2}}]  {1}'.format(*resource_info, max_width))
+```
+to
+```python
+		print('  [{0:{2}}]  {1}'.format(*(resource_info + [max_width]]))
+```
 
 ### Unit tests
 
@@ -110,7 +121,7 @@ Example configuration file:
 ## Usage
 
 ```sh
-Usage: booklist.py [-h] [-d] config_file
+Usage: booklist [-h] [-d] config_file
 
 Search a public library's catalog website for this year's publications
 from authors listed in the given config file.

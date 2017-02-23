@@ -33,7 +33,7 @@ def test_no_required_args(capsys, create_parser):
 
 def test_good_run(tmpdir, capsys):
     config_in = '''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: ebook
     authors:
        - firstname: James

@@ -11,7 +11,7 @@ from booklist.config import Configurator, ConfigError
 def test_good_config(tmpdir):
     # Good YAML content.
     config_in = '''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: Book
     authors:
         - firstname: Sue
@@ -23,7 +23,7 @@ def test_good_config(tmpdir):
     '''
     # Expected output:  the same YAML content but in a Python dictionary.
     config_out = {
-        'catalog-url': 'http://catalog.library.loudoun.gov/',
+        'catalog-url': 'https://catalog.library.loudoun.gov/',
         'media-type': 'Book',
         'authors': [
             {'firstname': 'Sue',
@@ -60,7 +60,7 @@ def test_bad_yaml_format():
 def test_extraneous_spaces(tmpdir):
     # Good YAML content with spaces before and after values.
     config_in = '''
-    catalog-url:      http://catalog.library.loudoun.gov/
+    catalog-url:      https://catalog.library.loudoun.gov/
     media-type: Book
     authors:
         - firstname:     Sue
@@ -72,7 +72,7 @@ def test_extraneous_spaces(tmpdir):
     '''
     # Expected output:  the same YAML content but in a Python dictionary.
     config_out = {
-        'catalog-url': 'http://catalog.library.loudoun.gov/',
+        'catalog-url': 'https://catalog.library.loudoun.gov/',
         'media-type': 'Book',
         'authors': [
             {'firstname': 'Sue',
@@ -95,7 +95,7 @@ def test_quoted_text(tmpdir):
     # as the minimum length for the field is 1.  I'm not sure why the space
     # isn't stripped.  The quoted lastname is fine.
     config_in = '''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: Book
     authors:
         - firstname: ' '
@@ -106,7 +106,7 @@ def test_quoted_text(tmpdir):
     '''
     # Expected output:  the same YAML content but in a Python dictionary.
     config_out = {
-        'catalog-url': 'http://catalog.library.loudoun.gov/',
+        'catalog-url': 'https://catalog.library.loudoun.gov/',
         'media-type': 'Book',
         'authors': [
             {'firstname': ' ',
@@ -180,7 +180,7 @@ def test_missing_url(tmpdir):
 
 def test_bad_media_type(tmpdir):
     config_in = '''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: nonsense
     authors:
         - firstname: Sue
@@ -199,7 +199,7 @@ def test_bad_media_type(tmpdir):
 
 def test_bad_author_media_type(tmpdir):
     config_in = '''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: Book
     authors:
         - firstname: Sue
@@ -218,7 +218,7 @@ def test_bad_author_media_type(tmpdir):
 
 def test_optional_media_type(tmpdir):
     config_in = '''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     authors:
         - firstname: Sue
           lastname: Grafton
@@ -227,7 +227,7 @@ def test_optional_media_type(tmpdir):
           lastname: King
     '''
     config_out = {
-        'catalog-url': 'http://catalog.library.loudoun.gov/',
+        'catalog-url': 'https://catalog.library.loudoun.gov/',
         'authors': [
             {'firstname': 'Sue',
              'lastname': 'Grafton'},
@@ -243,14 +243,14 @@ def test_optional_media_type(tmpdir):
 def test_media_type_transformation(tmpdir):
     # This test also verifies all the allowed media types.
     config_in = Template('''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: $media
     authors:
         - firstname: Sue
           lastname: Grafton
     ''')
     config_out = {
-        'catalog-url': 'http://catalog.library.loudoun.gov/',
+        'catalog-url': 'https://catalog.library.loudoun.gov/',
         'media-type': 'Book',
         'authors': [
             {'firstname': 'Sue',
@@ -268,7 +268,7 @@ def test_media_type_transformation(tmpdir):
 
 def test_missing_author_lastname(tmpdir):
     config_in = '''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: Book
     authors:
         - firstname: Sue
@@ -285,7 +285,7 @@ def test_missing_author_lastname(tmpdir):
 
 def test_missing_author_firstname(tmpdir):
     config_in = '''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: Book
     authors:
         - lastname: Grafton
@@ -303,7 +303,7 @@ def test_missing_author_firstname(tmpdir):
 
 def test_author_tag_but_no_value(tmpdir):
     config_in = '''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: Book
     authors:
         -
@@ -317,7 +317,7 @@ def test_author_tag_but_no_value(tmpdir):
 
 def test_no_authors(tmpdir):
     config_in = '''
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: Book
     authors:
     '''

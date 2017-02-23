@@ -31,9 +31,8 @@ setup(
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.0.5',
         'Topic :: Other/Nonlisted Topic'
     ]
 )
