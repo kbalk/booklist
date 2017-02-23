@@ -91,7 +91,7 @@ class ConfigError(Exception):
 
 
 class Configurator(object):
-    """Handles configuration file processing for the booklist.py script.
+    """Handles configuration file processing for the booklist.
 
     Refer to self._schema for the expected config file format.
     """

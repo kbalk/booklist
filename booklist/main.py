@@ -28,7 +28,7 @@ in the coming year.
 
 Usage:
 --------------------------------------------------------------------------
-Usage: booklist.py [-h] [-d] config_file
+Usage: booklist [-h] [-d] config_file
 
     Search a public library's catalog website for this year's publications
     from authors listed in the given config file.

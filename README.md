@@ -1,4 +1,4 @@
-# booklist.py
+# booklist
 
 If you're a frequent library user, you might go online to your library's
 public website and search for the latest books available from your favorite
