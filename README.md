@@ -57,7 +57,8 @@ in Python 3.5.  The synatax error is:  "only named arguments may follow
 ```
 to
 ```python
-		print('  [{0:{2}}]  {1}'.format(*(resource_info + [max_width]]))
+		print('  [{0:{2}}]  {1}'.
+                    format(*(resource_info + (max_width,))))
 ```
 
 ### Unit tests
