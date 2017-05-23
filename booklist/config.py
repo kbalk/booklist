@@ -12,8 +12,7 @@ The ConfigError class is used to report errors found in the configuration
 file.
 
 ---------------------------------------------------------------------------
-This particular implementation expects a config file in YAML format.  The
-tags are as follows:
+The config file is expected to be in in YAML format.  The tags are:
 
 catalog-url:
     Required.  Must be a valid URL for a website using the CARL.X
@@ -55,7 +54,7 @@ authors sub-tags:
 ---------------------------------------------------------------------------
 Example YAML config file:
 
-    catalog-url: http://catalog.library.loudoun.gov/
+    catalog-url: https://catalog.library.loudoun.gov/
     media-type: Book
     authors:
         - firstname: James
