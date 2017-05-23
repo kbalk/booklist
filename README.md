@@ -108,15 +108,15 @@ Also, some media types are supersets, i.e., a type of 'book' includes
 Example configuration file:
 
 ```YAML
-	catalog-url: http://catalog.library.loudoun.gov/
-	media-type: Book
-	authors:
-		- firstname: James
-		  lastname: Patterson
-		  media-type: book on cd
+catalog-url: http://catalog.library.loudoun.gov/
+media-type: Book
+authors:
+   - firstname: James
+     lastname: Patterson
+     media-type: book on cd
 
-		- firstname: Alexander
-	 	  lastname: McCall Smith
+   - firstname: Alexander
+     lastname: McCall Smith
 ```
 
 ## Usage
