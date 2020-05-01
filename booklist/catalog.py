@@ -22,6 +22,9 @@ from voluptuous import Invalid
 
 from booklist.config import Configurator
 
+# pylint: disable=logging-format-interpolation
+
+
 class CatalogSearchError(Exception):
     """Exception used for reporting problems accessing the library catalog.
 
@@ -36,9 +39,9 @@ class CatalogSearchError(Exception):
     information that it's not necessary to have unique exceptions to
     create unique error messages for the user.
     """
-    pass
 
-class CatalogSearch(object):
+
+class CatalogSearch():
     """Handles requests to a public library's catalog website.
 
     To perform a search on the library's catalog, two types of requests
@@ -204,14 +207,14 @@ class CatalogSearch(object):
 
         # One of the fields in the data is a 'success' indicator; check
         # that the value is true.
-        if decoded_data['success'] != True:
+        if not decoded_data['success']:
             raise CatalogSearchError('Unsuccessful retrieving total number '
                                      'of matches on author, media and year')
 
         # Return the other field in the data that indicates the total number
         # of available publications.
-        self.logger.debug('Expected number of matches:  %s',
-                          decoded_data['totalHits'])
+        self.logger.debug(f"Expected number of matches:  "
+                          f"decoded_data['totalHits']")
         return decoded_data['totalHits']
 
     def __publications(self, author, filter_list):
@@ -238,11 +241,9 @@ class CatalogSearch(object):
         try:
             decoded_data = response.json()
         except ValueError as exc:
-            raise CatalogSearchError("Bad JSON data in response:  {}".
-                                     format(exc))
+            raise CatalogSearchError(f"Bad JSON data in response:  {exc}")
 
-        self.logger.debug('Decoded response from search:  {}'.
-                          format(decoded_data))
+        self.logger.debug(f'Decoded response from search:  {decoded_data}')
         return decoded_data["resources"]
 
     @staticmethod
@@ -304,8 +305,8 @@ class CatalogSearch(object):
         """
         if not author or not media_type:
             raise CatalogSearchError(
-                'Arguments must be non-null:  author={}, media={}'.
-                format(author, media_type))
+                f'Arguments must be non-null:  author={author}, '
+                f'media={media_type}')
 
         # Media type one of the acceptable types?
         try:
@@ -356,9 +357,8 @@ class CatalogSearch(object):
             # If we retrieve more publications than expected, raise an error.
             if accumulated_count > total_count:
                 raise CatalogSearchError(
-                    'Received more publications than expected; expected {}, '
-                    'currently have {}'.
-                    format(total_count, accumulated_count))
+                    f'Received more publications than expected; expected '
+                    f'{total_count}, currently have {accumulated_count}')
 
         # Return the list of tuples.
         return filtered_results

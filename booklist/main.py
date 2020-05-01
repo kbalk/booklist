@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Automate search of public library website to retrieve list of publications.
 
-Takes a YAML file with the library's catalog URL and list of authors as
-input.  Issues the appropriate requests to that library's website for the
-latest publications for those authors.  Only works for libraries using
-the CARL.X Integrated Library System (ILS).
+Takes a YAML file with the library's catalog URL and list of authors and
+issues the appropriate requests to that library's website to retrieve the
+latest publications for those authors.  Only works for libraries using the
+CARL.X Integrated Library System (ILS).
 
 CARL.X ILS:
 --------------------------------------------------------------------------
@@ -13,9 +13,9 @@ the POST requests needed to obtain the number of expected publications
 and the list of those publications.  It has an "open" API, but that API
 appears to be open only to paying customers, i.e., the library staff.
 
-A request URL to search for a given book consists of an array of
+A request URL for CARL.X to search for a given book consists of an array of
 facetFilters.  You can filter on format  (media type), publication year,
-new titles, etc.  The 'New Titles' filter permits finer granularity in time,
+new titles, etc.  The 'New Titles' filter permits final granularity in time,
 e.g., weeks or months.  However, if you go to a library website using CARL.X
 and manually select a format filter, the 'New Titles' filter is no longer
 selectable.  It's not clear why that is so, but a 'Publication Year' filter
@@ -24,8 +24,9 @@ is still permitted.
 This script defaults to a search within a publication year and that year is
 the current one.  Media with an unknown publication time period will also be
 returned from a search as they are future releases that might be available
-in the current year.
+in the coming year.
 
+Usage:
 --------------------------------------------------------------------------
 Usage: booklist [-h] [-d] config_file
 
@@ -37,7 +38,7 @@ Usage: booklist [-h] [-d] config_file
 
     optional arguments:
       -h, --help   show this help message and exit
-      -d, --debug  Print debug information to stderr
+      -d, --debug  Print debug information to stdout
 """
 
 import argparse
@@ -116,7 +117,8 @@ def print_search_results(config_values, logger):
         if search_results:
             max_width = len(max([info[0] for info in search_results], key=len))
             for resource_info in search_results:
-                print('  [{0:{2}}]  {1}'.format(*resource_info, max_width))
+                print('  [{0:{2}}]  {1}'.
+                      format(*(resource_info + (max_width,))))
 
 
 def main():

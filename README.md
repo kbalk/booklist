@@ -40,26 +40,13 @@ library and authors of interest.  Refer to the
 
 ### Prerequisites
 
-This script was written using Python 3.5 and tested with Pytest 3.0.5.
+This script was written using Python 3.7 and uses:
 
-* Pytest 3.0.5
+* Pytest
 * PyYAML
 * Voluptuous (for validation of YAML data)
 * Requests
 
-Python versions 3.3 and 3.4 will fail with a syntax error in main.py due to
-a restriction introduced in unpacking arguments.  That restriction was lifted
-in Python 3.5.  The synatax error is:  "only named arguments may follow
-\*expression" and can be fixed by changing the line:
-
-```python
-		print('  [{0:{2}}]  {1}'.format(*resource_info, max_width))
-```
-to
-```python
-		print('  [{0:{2}}]  {1}'.
-                    format(*(resource_info + (max_width,))))
-```
 
 ### Unit tests
 

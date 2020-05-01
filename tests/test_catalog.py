@@ -18,21 +18,21 @@ def sue_grafton_publications(scope='module'):
     # The following are the 2015 publications for Sue Grafton:
     return {
         'Large Print': [
-            'J is for judgment',
-            'K is for killer : a Kinsey Millhone mystery',
-            'L is for lawless',
-            'M is for malice : a Kinsey Millhone mystery',
-            'N is for noose a Kinsey Millhone mystery',
-            'O is for outlaw',
-            'X'
+            '"J" is for judgment',
+            '"K" is for killer : a Kinsey Millhone mystery',
+            '"L" is for lawless',
+            '"M" is for malice : a Kinsey Millhone mystery',
+            '"N" is for noose a Kinsey Millhone mystery',
+            '"O" is for outlaw',
+            '"X"'
         ],
         'Book': ['X'],
         'Book on CD': ['X'],
         'eAudioBook': [
-            'X is for',
-            'X'
+            '"X" is for',
+            '"X"'
         ],
-        'eBook': ['X is for']
+        'eBook': ['"X" is for']
     }
 
 def test_good_init(catalog_url):
@@ -95,4 +95,3 @@ def test_bad_search_no_media(catalog_url):
     with pytest.raises(CatalogSearchError) as excinfo:
         catalog.search('Grafton, Sue', '')
     assert 'Arguments' in str(excinfo.value)
-

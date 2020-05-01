@@ -86,10 +86,9 @@ class ConfigError(Exception):
     Attributes:
        msg - description of type of error
     """
-    pass
 
 
-class Configurator(object):
+class Configurator():
     """Handles configuration file processing for the booklist.
 
     Refer to self._schema for the expected config file format.
