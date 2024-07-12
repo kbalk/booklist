@@ -41,7 +41,7 @@ class CatalogSearchError(Exception):
     """
 
 
-class CatalogSearch():
+class CatalogSearch:
     """Handles requests to a public library's catalog website.
 
     To perform a search on the library's catalog, two types of requests
@@ -84,7 +84,7 @@ class CatalogSearch():
         # If debugging is enabled, turn on debugging in the requests package.
         if self.logger.isEnabledFor(logging.DEBUG):
             http_client.HTTPConnection.debuglevel = 1
-            requests_log = logging.getLogger('requests.packages.urllib3')
+            requests_log = logging.getLogger("requests.packages.urllib3")
             requests_log.setLevel(logging.DEBUG)
             requests_log.propagate = True
 
@@ -114,8 +114,7 @@ class CatalogSearch():
             int:  13-digit unique value
         """
         CatalogSearch.TIMESTAMP_INCREMENT += 1
-        return int(mktime(gmtime()) * 1000) + \
-                CatalogSearch.TIMESTAMP_INCREMENT
+        return int(mktime(gmtime()) * 1000) + CatalogSearch.TIMESTAMP_INCREMENT
 
     def __issue_request(self, endpoint, author, filter_list):
         """Issues a POST request and tests for an error in the response.
@@ -134,38 +133,40 @@ class CatalogSearch():
                                  timed out.
         """
         headers = {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/json; charset=utf-8',
-            'Accept': "application/json, text/javascript, */*; q=0.01",
-            'Accept-Language': 'en-US,en;q=0.8',
-            'Ls2pac-config-type': 'pac',
-            'Ls2pac-config-name': 'default - Go Live load',
-            'Referer': self._catalog_url
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/json; charset=utf-8",
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            "Accept-Language": "en-US,en;q=0.8",
+            "Ls2pac-config-type": "pac",
+            "Ls2pac-config-name": "default - Go Live load",
+            "Referer": self._catalog_url,
         }
 
         # Create the dictionary to contain filter, sort and other
         # information.  This dictionary will be converted to JSON format
         # for the POST request.
         search_json = {
-            'addToHistory': True,
-            'dbCodes': [],
-            'hitsPerPage': CatalogSearch.MAX_HITS_PER_PAGE,
-            'sortCriteria': 'NewlyAdded',
-            'startIndex': 0,
-            'targetAudience': '',
-            'facetFilters': filter_list,
-            'searchTerm' : author
+            "addToHistory": True,
+            "dbCodes": [],
+            "hitsPerPage": CatalogSearch.MAX_HITS_PER_PAGE,
+            "sortCriteria": "NewlyAdded",
+            "startIndex": 0,
+            "targetAudience": "",
+            "facetFilters": filter_list,
+            "searchTerm": author,
         }
 
         # Issue the request using the given URL endpoint.  Also, provide a
         # 'cache buster' timestamp, the json 'data' containing filter
         # information, and a connection timeout value.
         try:
-            response = requests.post(urljoin(self._catalog_url, endpoint),
-                                     params={'_' : self.__timestamp()},
-                                     data=json.dumps(search_json),
-                                     headers=headers,
-                                     timeout=self.TIMEOUT)
+            response = requests.post(
+                urljoin(self._catalog_url, endpoint),
+                params={"_": self.__timestamp()},
+                data=json.dumps(search_json),
+                headers=headers,
+                timeout=self.TIMEOUT,
+            )
         except requests.exceptions.RequestException as exc:
             raise CatalogSearchError(str(exc))
 
@@ -173,8 +174,11 @@ class CatalogSearch():
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as exc:
-            raise CatalogSearchError("Response to '{}' {} request:  {}".
-                                     format(self._catalog_url, endpoint, exc))
+            raise CatalogSearchError(
+                "Response to '{}' {} request:  {}".format(
+                    self._catalog_url, endpoint, exc
+                )
+            )
 
         # Return a successful response.
         return response
@@ -193,8 +197,7 @@ class CatalogSearch():
                                  JSON format.
         """
         try:
-            response = self.__issue_request('search/count', author,
-                                            filter_list)
+            response = self.__issue_request("search/count", author, filter_list)
         except CatalogSearchError:
             raise
 
@@ -202,20 +205,20 @@ class CatalogSearch():
         try:
             decoded_data = response.json()
         except ValueError as exc:
-            raise CatalogSearchError("Bad JSON data in response:  {}".
-                                     format(exc))
+            raise CatalogSearchError("Bad JSON data in response:  {}".format(exc))
 
         # One of the fields in the data is a 'success' indicator; check
         # that the value is true.
-        if not decoded_data['success']:
-            raise CatalogSearchError('Unsuccessful retrieving total number '
-                                     'of matches on author, media and year')
+        if not decoded_data["success"]:
+            raise CatalogSearchError(
+                "Unsuccessful retrieving total number "
+                "of matches on author, media and year"
+            )
 
         # Return the other field in the data that indicates the total number
         # of available publications.
-        self.logger.debug(f"Expected number of matches:  "
-                          f"decoded_data['totalHits']")
-        return decoded_data['totalHits']
+        self.logger.debug(f"Expected number of matches:  " f"decoded_data['totalHits']")
+        return decoded_data["totalHits"]
 
     def __publications(self, author, filter_list):
         """Request a page of publications for the given author.
@@ -233,7 +236,7 @@ class CatalogSearch():
                                  JSON format.
         """
         try:
-            response = self.__issue_request('search', author, filter_list)
+            response = self.__issue_request("search", author, filter_list)
         except CatalogSearchError:
             raise
 
@@ -243,7 +246,7 @@ class CatalogSearch():
         except ValueError as exc:
             raise CatalogSearchError(f"Bad JSON data in response:  {exc}")
 
-        self.logger.debug(f'Decoded response from search:  {decoded_data}')
+        self.logger.debug(f"Decoded response from search:  {decoded_data}")
         return decoded_data["resources"]
 
     @staticmethod
@@ -271,18 +274,18 @@ class CatalogSearch():
             # Some books don't have authors - don't know why,
             # but 'The Mystery Writers of America cookbook' is one
             # of them; it shows up in a search for Sue Grafton.
-            if not publication['shortAuthor']:
+            if not publication["shortAuthor"]:
                 continue
 
-            pub_format = 'Unknown'
-            if publication['format']:
-                pub_format = publication['format']
+            pub_format = "Unknown"
+            if publication["format"]:
+                pub_format = publication["format"]
 
-            pub_title = 'Unknown'
-            if publication['shortTitle']:
-                pub_title = publication['shortTitle']
+            pub_title = "Unknown"
+            if publication["shortTitle"]:
+                pub_title = publication["shortTitle"]
 
-            if author in publication['shortAuthor']:
+            if author in publication["shortAuthor"]:
                 filtered_results.append((pub_format, pub_title))
 
     def search(self, author, media_type):
@@ -305,8 +308,8 @@ class CatalogSearch():
         """
         if not author or not media_type:
             raise CatalogSearchError(
-                f'Arguments must be non-null:  author={author}, '
-                f'media={media_type}')
+                f"Arguments must be non-null:  author={author}, " f"media={media_type}"
+            )
 
         # Media type one of the acceptable types?
         try:
@@ -317,16 +320,11 @@ class CatalogSearch():
         # Perform two sets of requests - one for publications within the
         # current year and one for publications of an unknown year.
         filtered_results = []
-        for year in ['unknown', self._year_filter]:
-            filter_list = [{
-                'facetDisplay': year,
-                'facetValue': year,
-                'facetName': 'Year'
-            }, {
-                'facetDisplay': media,
-                'facetValue': media,
-                'facetName': 'Format'
-            }]
+        for year in ["unknown", self._year_filter]:
+            filter_list = [
+                {"facetDisplay": year, "facetValue": year, "facetName": "Year"},
+                {"facetDisplay": media, "facetValue": media, "facetName": "Format"},
+            ]
 
             # Determine how many publications to expect so we know when
             # to stop issuing requests.
@@ -351,14 +349,14 @@ class CatalogSearch():
 
                 # Apply additional filters that can't be handled in the
                 # POST request.
-                self.__apply_local_filters(author, publications,
-                                           filtered_results)
+                self.__apply_local_filters(author, publications, filtered_results)
 
             # If we retrieve more publications than expected, raise an error.
             if accumulated_count > total_count:
                 raise CatalogSearchError(
-                    f'Received more publications than expected; expected '
-                    f'{total_count}, currently have {accumulated_count}')
+                    f"Received more publications than expected; expected "
+                    f"{total_count}, currently have {accumulated_count}"
+                )
 
         # Return the list of tuples.
         return filtered_results

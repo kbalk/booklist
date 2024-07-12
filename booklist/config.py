@@ -68,15 +68,8 @@ Example YAML config file:
 import logging
 
 from yaml import safe_load, YAMLError
-from voluptuous import (
-    Required,
-    Url,
-    All,
-    Length,
-    Schema,
-    MultipleInvalid,
-    Invalid
-)
+from voluptuous import Required, Url, All, Length, Schema, MultipleInvalid, Invalid
+
 
 class ConfigError(Exception):
     """Exception used for reporting problems with config file.
@@ -88,7 +81,7 @@ class ConfigError(Exception):
     """
 
 
-class Configurator():
+class Configurator:
     """Handles configuration file processing for the booklist.
 
     Refer to self._schema for the expected config file format.
@@ -106,18 +99,17 @@ class Configurator():
     # the name will first be converted to lower case before comparing it
     # against this list.
     MEDIA_TYPES = [
-        {'configName': 'book', 'FacetName': 'Book'},
-        {'configName': 'electronic resource',
-         'FacetName': 'Electronic Resource'},
-        {'configName': 'ebook', 'FacetName': 'eBook'},
-        {'configName': 'eaudiobook', 'FacetName': 'eAudioBook'},
-        {'configName': 'book on cd', 'FacetName': 'Book on CD'},
-        {'configName': 'large print', 'FacetName': 'Large Print'},
-        {'configName': 'music cd', 'FacetName': 'Music CD'},
-        {'configName': 'dvd', 'FacetName': 'DVD'},
-        {'configName': 'blu-ray', 'FacetName': 'Blu-Ray'},
+        {"configName": "book", "FacetName": "Book"},
+        {"configName": "electronic resource", "FacetName": "Electronic Resource"},
+        {"configName": "ebook", "FacetName": "eBook"},
+        {"configName": "eaudiobook", "FacetName": "eAudioBook"},
+        {"configName": "book on cd", "FacetName": "Book on CD"},
+        {"configName": "large print", "FacetName": "Large Print"},
+        {"configName": "music cd", "FacetName": "Music CD"},
+        {"configName": "dvd", "FacetName": "DVD"},
+        {"configName": "blu-ray", "FacetName": "Blu-Ray"},
     ]
-    DEFAULT_MEDIA_TYPE = 'Book'
+    DEFAULT_MEDIA_TYPE = "Book"
 
     def __init__(self, config_filename, logger=None):
         """Initialize the configuration filename and map of config values.
@@ -127,24 +119,29 @@ class Configurator():
            logger (logging instance):  caller's logger
         """
         if not config_filename or not isinstance(config_filename, str):
-            raise ConfigError("Error:  The config filename must be a "
-                              "non-null string")
+            raise ConfigError(
+                "Error:  The config filename must be a " "non-null string"
+            )
 
         self.logger = logger or logging.getLogger(__name__)
 
         self._filename = config_filename
-        self.logger.info('Config file:  %s', self._filename)
+        self.logger.info("Config file:  %s", self._filename)
 
         # Validation rules for YAML configuration file.
-        self._schema = Schema({
-            Required('catalog-url'):  All(Url(str), Length(min=1)),
-            'media-type': All(str, Configurator.validate_media_type),
-            Required('authors'): [{
-                Required('firstname'): All(str, Length(min=1)),
-                Required('lastname'): All(str, Length(min=1)),
-                'media-type': All(str, Configurator.validate_media_type)
-            }]
-        })
+        self._schema = Schema(
+            {
+                Required("catalog-url"): All(Url(str), Length(min=1)),
+                "media-type": All(str, Configurator.validate_media_type),
+                Required("authors"): [
+                    {
+                        Required("firstname"): All(str, Length(min=1)),
+                        Required("lastname"): All(str, Length(min=1)),
+                        "media-type": All(str, Configurator.validate_media_type),
+                    }
+                ],
+            }
+        )
 
     @staticmethod
     def validate_media_type(media_type):
@@ -167,8 +164,8 @@ class Configurator():
         media = media_type.lower()
         facet_name = None
         for mapping in Configurator.MEDIA_TYPES:
-            if mapping['configName'] == media:
-                facet_name = mapping['FacetName']
+            if mapping["configName"] == media:
+                facet_name = mapping["FacetName"]
                 break
         else:
             raise Invalid("Media type of '{}' is invalid.".format(media_type))
@@ -189,7 +186,7 @@ class Configurator():
         # Attempt to read the YAML-formatted config file.
         yaml_config = None
         try:
-            with open(self._filename, 'r') as fh_yamlfile:
+            with open(self._filename, "r") as fh_yamlfile:
                 try:
                     # Read the YAML formatted information using safe_load().
                     # safe_load() will only recognize standard YAML tags
@@ -199,11 +196,12 @@ class Configurator():
                     yaml_config = safe_load(fh_yamlfile)
                 except (YAMLError, TypeError) as exc:
                     raise ConfigError(
-                        "Error: config file '{}' not a valid YAML file: {}".
-                        format(self._filename, exc))
+                        "Error: config file '{}' not a valid YAML file: {}".format(
+                            self._filename, exc
+                        )
+                    )
         except IOError as exc:
-            raise ConfigError("Config file '{}':  {}".
-                              format(self._filename, exc))
+            raise ConfigError("Config file '{}':  {}".format(self._filename, exc))
 
         # Validate the YAML content against the schema and return the
         # transformed content.
@@ -211,11 +209,14 @@ class Configurator():
         try:
             dict_config = self._schema(yaml_config)
         except MultipleInvalid as exc:
-            msg = ["Error:  config file '{}' fails schema validation: ".
-                   format(self._filename)]
+            msg = [
+                "Error:  config file '{}' fails schema validation: ".format(
+                    self._filename
+                )
+            ]
             for error in exc.errors:
                 msg.append(str(error))
-            raise ConfigError('\n'.join(msg))
+            raise ConfigError("\n".join(msg))
 
         self.logger.debug("Config object:  %s", dict_config)
         return dict_config

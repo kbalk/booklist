@@ -48,6 +48,7 @@ import sys
 from booklist.config import Configurator
 from booklist.catalog import CatalogSearch
 
+
 def cmdline_parser():
     """Return command line arguments, if they're valid.
 
@@ -58,16 +59,19 @@ def cmdline_parser():
         argparse.ArgumentParser - command line parser
     """
     parser = argparse.ArgumentParser(
-        description=("Search a public library's catalog website for this "
-                     "year's publications from authors listed in the given "
-                     "config file."))
+        description=(
+            "Search a public library's catalog website for this "
+            "year's publications from authors listed in the given "
+            "config file."
+        )
+    )
 
     parser.add_argument(
-        'config_file',
-        help="Config file with library's catalog url and list of authors")
+        "config_file", help="Config file with library's catalog url and list of authors"
+    )
     parser.add_argument(
-        '-d', '--debug', action='store_true',
-        help='Print debug information to stdout')
+        "-d", "--debug", action="store_true", help="Print debug information to stdout"
+    )
     return parser
 
 
@@ -88,22 +92,21 @@ def print_search_results(config_values, logger):
     # The default type is the value specified in the config file or
     # if not found, the standard default type.
     default_media = Configurator.DEFAULT_MEDIA_TYPE
-    if config_values['media-type']:
-        default_media = config_values['media-type']
+    if config_values["media-type"]:
+        default_media = config_values["media-type"]
 
     try:
-        catalog = CatalogSearch(config_values['catalog-url'], logger)
+        catalog = CatalogSearch(config_values["catalog-url"], logger)
     except CatalogSearch.CatalogSearchError:
         raise  # Only occurs if constructor parameters are bad.
 
-    for author_info in config_values['authors']:
-        author_name = "{}, {}".format(author_info['lastname'],
-                                      author_info['firstname'])
+    for author_info in config_values["authors"]:
+        author_name = "{}, {}".format(author_info["lastname"], author_info["firstname"])
         media = default_media
-        if 'media-type' in author_info:
-            media = author_info['media-type']
+        if "media-type" in author_info:
+            media = author_info["media-type"]
 
-        print('{} -- {}s:'.format(author_name, media))
+        print("{} -- {}s:".format(author_name, media))
         try:
             search_results = catalog.search(author_name, media)
         except CatalogSearch.CatalogSearchError:
@@ -117,8 +120,7 @@ def print_search_results(config_values, logger):
         if search_results:
             max_width = len(max([info[0] for info in search_results], key=len))
             for resource_info in search_results:
-                print('  [{0:{2}}]  {1}'.
-                      format(*(resource_info + (max_width,))))
+                print("  [{0:{2}}]  {1}".format(*(resource_info + (max_width,))))
 
 
 def main():
@@ -129,9 +131,11 @@ def main():
 
     # Use logging for error and/or debug messages to stdout.
     loglevel = logging.DEBUG if args.debug else logging.ERROR
-    logging.basicConfig(format='%(asctime)s %(levelname)s:  %(message)s',
-                        datefmt='%H:%M:%S',
-                        level=loglevel)
+    logging.basicConfig(
+        format="%(asctime)s %(levelname)s:  %(message)s",
+        datefmt="%H:%M:%S",
+        level=loglevel,
+    )
     logger = logging.getLogger()
 
     # Validate the config file contents and get the results in a dictionary.
