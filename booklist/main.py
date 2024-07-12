@@ -101,12 +101,12 @@ def print_search_results(config_values, logger):
         raise  # Only occurs if constructor parameters are bad.
 
     for author_info in config_values["authors"]:
-        author_name = "{}, {}".format(author_info["lastname"], author_info["firstname"])
+        author_name = f"{author_info['lastname']}, {author_info['firstname']}"
         media = default_media
         if "media-type" in author_info:
             media = author_info["media-type"]
 
-        print("{} -- {}s:".format(author_name, media))
+        print(f"{author_name} -- {media}s:")
         try:
             search_results = catalog.search(author_name, media)
         except CatalogSearch.CatalogSearchError:
@@ -118,9 +118,9 @@ def print_search_results(config_values, logger):
         # of other media types, it seemed useful to provide that
         # extra information.
         if search_results:
-            max_width = len(max([info[0] for info in search_results], key=len))
+            max_width = len(max((info[0] for info in search_results), key=len))
             for resource_info in search_results:
-                print("  [{0:{2}}]  {1}".format(*(resource_info + (max_width,))))
+                print(f"  [{resource_info[0]:{max_width}}]  {resource_info[1]}")
 
 
 def main():

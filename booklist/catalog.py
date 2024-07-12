@@ -175,10 +175,8 @@ class CatalogSearch:
             response.raise_for_status()
         except requests.exceptions.HTTPError as exc:
             raise CatalogSearchError(
-                "Response to '{}' {} request:  {}".format(
-                    self._catalog_url, endpoint, exc
-                )
-            )
+                f"Response to '{self._catalog_url}' {endpoint} request:  "
+            ) from exc
 
         # Return a successful response.
         return response
@@ -205,7 +203,7 @@ class CatalogSearch:
         try:
             decoded_data = response.json()
         except ValueError as exc:
-            raise CatalogSearchError("Bad JSON data in response:  {}".format(exc))
+            raise CatalogSearchError("Bad JSON data in response:  ") from exc
 
         # One of the fields in the data is a 'success' indicator; check
         # that the value is true.
@@ -217,7 +215,7 @@ class CatalogSearch:
 
         # Return the other field in the data that indicates the total number
         # of available publications.
-        self.logger.debug(f"Expected number of matches:  " f"decoded_data['totalHits']")
+        self.logger.debug(f"Expected number of matches:  {decoded_data['totalHits']}")
         return decoded_data["totalHits"]
 
     def __publications(self, author, filter_list):
@@ -244,7 +242,7 @@ class CatalogSearch:
         try:
             decoded_data = response.json()
         except ValueError as exc:
-            raise CatalogSearchError(f"Bad JSON data in response:  {exc}")
+            raise CatalogSearchError("Bad JSON data in response:  ") from exc
 
         self.logger.debug(f"Decoded response from search:  {decoded_data}")
         return decoded_data["resources"]

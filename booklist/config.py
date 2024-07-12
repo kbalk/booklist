@@ -119,9 +119,7 @@ class Configurator:
            logger (logging instance):  caller's logger
         """
         if not config_filename or not isinstance(config_filename, str):
-            raise ConfigError(
-                "Error:  The config filename must be a " "non-null string"
-            )
+            raise ConfigError("Error:  The config filename must be a non-null string")
 
         self.logger = logger or logging.getLogger(__name__)
 
@@ -168,7 +166,7 @@ class Configurator:
                 facet_name = mapping["FacetName"]
                 break
         else:
-            raise Invalid("Media type of '{}' is invalid.".format(media_type))
+            raise Invalid(f"Media type of '{media_type}' is invalid.")
         return facet_name
 
     def validate(self):
@@ -186,7 +184,7 @@ class Configurator:
         # Attempt to read the YAML-formatted config file.
         yaml_config = None
         try:
-            with open(self._filename, "r") as fh_yamlfile:
+            with open(self._filename, "r", encoding="utf-8") as fh_yamlfile:
                 try:
                     # Read the YAML formatted information using safe_load().
                     # safe_load() will only recognize standard YAML tags
@@ -196,12 +194,11 @@ class Configurator:
                     yaml_config = safe_load(fh_yamlfile)
                 except (YAMLError, TypeError) as exc:
                     raise ConfigError(
-                        "Error: config file '{}' not a valid YAML file: {}".format(
-                            self._filename, exc
-                        )
-                    )
+                        f"Error: config file '{self._filename}' not a valid "
+                        "YAML file:  "
+                    ) from exc
         except IOError as exc:
-            raise ConfigError("Config file '{}':  {}".format(self._filename, exc))
+            raise ConfigError(f"Config file '{self._filename}'") from exc
 
         # Validate the YAML content against the schema and return the
         # transformed content.
@@ -209,14 +206,10 @@ class Configurator:
         try:
             dict_config = self._schema(yaml_config)
         except MultipleInvalid as exc:
-            msg = [
-                "Error:  config file '{}' fails schema validation: ".format(
-                    self._filename
-                )
-            ]
+            msg = [f"Error:  config file '{self._filename}' fails schema validation: "]
             for error in exc.errors:
                 msg.append(str(error))
-            raise ConfigError("\n".join(msg))
+            raise ConfigError("\n".join(msg)) from exc
 
-        self.logger.debug("Config object:  %s", dict_config)
+        self.logger.debug(f"Config object:  {dict_config}")
         return dict_config
