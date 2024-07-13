@@ -31,6 +31,7 @@ catalog-url:  https://catalog.library.loudoun.gov/
 #     music cd
 #     dvd
 #     blu-ray
+#     emusic
 # The media types can be in upper, lower or mixed case as the case
 # will be ignored.  Types that are more than one word can be enclosed
 # in quotes or not.
@@ -38,6 +39,8 @@ catalog-url:  https://catalog.library.loudoun.gov/
 # Note that some media types are supersets, i.e., a type of 'book'
 # includes 'large print' books.  A type of 'electronic resource'
 # includes 'ebook'.
+#
+# Also, some media types will return duplicate title names.
 # -------------------------------------------------------------------
 media-type:   book
 
@@ -54,6 +57,10 @@ authors:
 
     - firstname:  Alexander
       lastname:   McCall Smith
+
+    - firstname:  Taylor
+      lastname:   Swift
+      media-type: emusic
 
 # -------------------------------------------------------------------
 # End

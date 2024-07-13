@@ -84,6 +84,7 @@ Allowed media types:
 - Music CD
 - DVD
 - Blu-Ray
+- eMusic
 
 Note:  The media types can be in upper, lower or mixed case as the case
 will be ignored.  Types that consist of more than one word may be enclosed
@@ -91,6 +92,10 @@ in quotes or not.
 
 Also, some media types are supersets, i.e., a type of 'book' includes
 'large print' books.  A type of 'electronic resource' includes 'ebook'.
+
+Also, some media types will appear to return what appears to be duplicate
+entries, but the library catalog shows different ids for the entries, so
+the library catalog considers them unique entries.
 
 Example configuration file:
 

@@ -29,6 +29,7 @@ media-type:
         music cd
         dvd
         blu-ray
+        emusic
     These types can be in upper, lower or mixed case as the case will
     be ignored.  Types that are more than one word can be enclosed in
     quotes or not; it won't matter.
@@ -98,6 +99,17 @@ class Configurator:
     # Note:  when validating the media type name found in the config file,
     # the name will first be converted to lower case before comparing it
     # against this list.
+    #
+    # Note2:  Some media types don't have a "shortAuthor" field and as
+    # responses without an author are ignored, no values are returned.
+    # These media types are not allowed as they would be misleading.
+    # Examples of those media types: Visual Materials, Video Recording,
+    # eVideo, eJournal.
+    #
+    # Note3:  Some media types appear to return duplicate entries, but the
+    # detailed information shows unique ids for the entries.  Examples of
+    # those media types: eAudioBook and AudioBook.  So the "e" version of
+    # the media type is allowed and the non-"e" version is not.
     MEDIA_TYPES = [
         {"configName": "book", "FacetName": "Book"},
         {"configName": "electronic resource", "FacetName": "Electronic Resource"},
@@ -108,6 +120,7 @@ class Configurator:
         {"configName": "music cd", "FacetName": "Music CD"},
         {"configName": "dvd", "FacetName": "DVD"},
         {"configName": "blu-ray", "FacetName": "Blu-Ray"},
+        {"configName": "emusic", "FacetName": "eMusic"},
     ]
     DEFAULT_MEDIA_TYPE = "Book"
 
