@@ -168,15 +168,15 @@ class CatalogSearch:
                 timeout=self.TIMEOUT,
             )
         except requests.exceptions.RequestException as exc:
-            raise CatalogSearchError(str(exc))
+            raise CatalogSearchError(exc) from None
 
         # Check for a non-ok status code.
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as exc:
             raise CatalogSearchError(
-                f"Response to '{self._catalog_url}' {endpoint} request:  "
-            ) from exc
+                f"Response to '{self._catalog_url}' {endpoint} request:  {exc}"
+            ) from None
 
         # Return a successful response.
         return response
@@ -194,16 +194,13 @@ class CatalogSearch:
             CatalogSearchError:  request failed or response was not in
                                  JSON format.
         """
-        try:
-            response = self.__issue_request("search/count", author, filter_list)
-        except CatalogSearchError:
-            raise
+        response = self.__issue_request("search/count", author, filter_list)
 
         # Convert the data in the response from JSON format to a dictionary.
         try:
             decoded_data = response.json()
         except ValueError as exc:
-            raise CatalogSearchError("Bad JSON data in response:  ") from exc
+            raise CatalogSearchError(f"Bad JSON data in response:  {exc}") from None
 
         # One of the fields in the data is a 'success' indicator; check
         # that the value is true.
@@ -233,16 +230,13 @@ class CatalogSearch:
             CatalogSearchError:  request failed or response was not in
                                  JSON format.
         """
-        try:
-            response = self.__issue_request("search", author, filter_list)
-        except CatalogSearchError:
-            raise
+        response = self.__issue_request("search", author, filter_list)
 
         # Convert the data in the response from JSON format to a dictionary.
         try:
             decoded_data = response.json()
         except ValueError as exc:
-            raise CatalogSearchError("Bad JSON data in response:  ") from exc
+            raise CatalogSearchError(f"Bad JSON data in response:  {exc}") from None
 
         self.logger.debug(f"Decoded response from search:  {decoded_data}")
         return decoded_data["resources"]
@@ -313,7 +307,7 @@ class CatalogSearch:
         try:
             media = Configurator.validate_media_type(media_type)
         except Invalid as exc:
-            raise CatalogSearchError(str(exc))
+            raise CatalogSearchError(exc) from None
 
         # Perform two sets of requests - one for publications within the
         # current year and one for publications of an unknown year.
@@ -326,10 +320,7 @@ class CatalogSearch:
 
             # Determine how many publications to expect so we know when
             # to stop issuing requests.
-            try:
-                total_count = self.__publications_count(author, filter_list)
-            except CatalogSearchError:
-                raise
+            total_count = self.__publications_count(author, filter_list)
 
             if total_count == 0:
                 continue
@@ -338,10 +329,7 @@ class CatalogSearch:
             # retrieved
             accumulated_count = 0
             while accumulated_count < total_count:
-                try:
-                    publications = self.__publications(author, filter_list)
-                except CatalogSearchError:
-                    raise
+                publications = self.__publications(author, filter_list)
 
                 accumulated_count += len(publications)
 

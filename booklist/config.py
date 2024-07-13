@@ -119,7 +119,7 @@ class Configurator:
            logger (logging instance):  caller's logger
         """
         if not config_filename or not isinstance(config_filename, str):
-            raise ConfigError("Error:  The config filename must be a non-null string")
+            raise ConfigError("Config filename must be a non-null string")
 
         self.logger = logger or logging.getLogger(__name__)
 
@@ -194,11 +194,10 @@ class Configurator:
                     yaml_config = safe_load(fh_yamlfile)
                 except (YAMLError, TypeError) as exc:
                     raise ConfigError(
-                        f"Error: config file '{self._filename}' not a valid "
-                        "YAML file:  "
-                    ) from exc
+                        f"Config file '{self._filename}' not a valid YAML file:  {exc}"
+                    ) from None
         except IOError as exc:
-            raise ConfigError(f"Config file '{self._filename}'") from exc
+            raise ConfigError(f"Config file '{self._filename}': {exc}") from None
 
         # Validate the YAML content against the schema and return the
         # transformed content.
@@ -206,10 +205,10 @@ class Configurator:
         try:
             dict_config = self._schema(yaml_config)
         except MultipleInvalid as exc:
-            msg = [f"Error:  config file '{self._filename}' fails schema validation: "]
+            msg = [f"Config file '{self._filename}' fails schema validation: "]
             for error in exc.errors:
                 msg.append(str(error))
-            raise ConfigError("\n".join(msg)) from exc
+            raise ConfigError("\n".join(msg)) from None
 
         self.logger.debug(f"Config object:  {dict_config}")
         return dict_config

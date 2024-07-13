@@ -85,7 +85,7 @@ def print_search_results(config_values, logger):
     Returns:
         None
 
-    Raises:
+    Raises:  (indirectly)
         CatalogSearch.CatalogSearchError:  bad parameters, connection errors,
                                            problems retrieving data
     """
@@ -95,10 +95,8 @@ def print_search_results(config_values, logger):
     if config_values["media-type"]:
         default_media = config_values["media-type"]
 
-    try:
-        catalog = CatalogSearch(config_values["catalog-url"], logger)
-    except CatalogSearch.CatalogSearchError:
-        raise  # Only occurs if constructor parameters are bad.
+    # Raises CatalogSearchError if constructor parameters are bad.
+    catalog = CatalogSearch(config_values["catalog-url"], logger)
 
     for author_info in config_values["authors"]:
         author_name = f"{author_info['lastname']}, {author_info['firstname']}"
@@ -107,10 +105,8 @@ def print_search_results(config_values, logger):
             media = author_info["media-type"]
 
         print(f"{author_name} -- {media}s:")
-        try:
-            search_results = catalog.search(author_name, media)
-        except CatalogSearch.CatalogSearchError:
-            raise
+        # Raises CatalogSearchError if there are errors.
+        search_results = catalog.search(author_name, media)
 
         # Print the search results; each entry in the results list
         # is a tuple containing the media type and publication name
@@ -139,8 +135,8 @@ def main():
     logger = logging.getLogger()
 
     # Validate the config file contents and get the results in a dictionary.
-    config = Configurator(args.config_file, logger)
     try:
+        config = Configurator(args.config_file, logger)
         config_values = config.validate()
     except Configurator.ConfigError as exc:
         logging.error(exc)
