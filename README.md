@@ -146,12 +146,12 @@ The `Voluptuous` package is no longer maintained.  I researched some
 alternatives to YAML validation and `strictyaml` looked like a possibility.
 However, there were issues with `strictyaml` at the time I checked:
 
-    - No checks for empty strings or a minimum length.  A check of
-      `Regex(r"\S+.*")` could be used, but the error message showed both
-      the prior line and the line with the empty string value.
-    - Custom validators (used for the media types) are considered
-      experimental.
-    - No recent efforts into maintaining the package for the last 6 months.
+- No checks for empty strings or a minimum length.  A check of
+  `Regex(r"\S+.*")` could be used, but the error message showed both
+  the prior line and the line with the empty string value.
+- Custom validators (used for the media types) are considered
+  experimental.
+- No recent efforts into maintaining the package for the last 6 months.
 
 Example of schema used in testing `strictyaml` (without custom validator):
 
