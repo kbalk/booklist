@@ -1,0 +1,70 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "booklist"
+version = "0.2.0"
+description = "Automated search for current publications of select authors"
+readme = "README.md"
+license = {text = "GNU GPL v3"}
+authors = [
+    { name = "K. Balk", email = "kbalk@pobox.com" },
+]
+keywords = [
+    "books",
+    "CARL.X",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Other/Nonlisted Topic",
+]
+requires-python = ">= 3.8"
+dependencies = [
+    "pyYAML >= 6.0.2rc1",
+    "requests >= 2.32.3",
+    "voluptuous >= 0.15.2",
+]
+
+[project.scripts]
+booklist = "booklist.main:main"
+
+[project.urls]
+Homepage = "https://github.com/kbalk/booklist"
+Repository = "https://github.com/kbalk/booklist"
+
+[tool.hatch.envs.hatch-static-analysis]
+dependencies = [
+    "black",
+    "isort",
+    "pylint",
+]
+
+[tool.hatch.envs.hatch-static-analysis.scripts]
+format-check = [
+  "isort --check-only --diff {args:.'}",
+  "black --check --diff {args:.}",
+]
+format-fix = [
+  "isort {args:.}",
+  "black {args:.}",
+]
+lint-check = [
+  "pylint {args:.}",
+]
+lint-fix = "lint-check"
+
+[tool.black]
+line-length = 80
+
+[tool.isort]
+profile = "black"
+line_length = 80
+
+[tool.pylint.messages_control]
+max-line-length = 80

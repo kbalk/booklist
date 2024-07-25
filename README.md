@@ -29,7 +29,7 @@ To install the latest release from github:
 
 ```sh
 git clone https://github.com/kbalk/booklist.git && cd booklist
-python setup.py install
+python install .
 ```
 
 After installation, modify the default configuration file `sample_config`,
