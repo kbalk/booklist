@@ -1,13 +1,13 @@
 """Test cases related to the command line processing."""
 
-from textwrap import dedent
 import logging
+from textwrap import dedent
 
 import pytest
 
-from booklist.main import cmdline_parser, print_search_results
-from booklist.config import Configurator
 from booklist.catalog import CatalogSearchError
+from booklist.config import Configurator
+from booklist.main import cmdline_parser, print_search_results
 
 # pylint: disable=missing-docstring
 

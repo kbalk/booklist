@@ -1,9 +1,10 @@
 """Test cases related to the CatalogSearch class"""
 
-from datetime import datetime
 import logging
+from datetime import datetime
 
 import pytest
+
 from booklist.catalog import CatalogSearch, CatalogSearchError
 
 # pylint: disable=missing-docstring,redefined-outer-name

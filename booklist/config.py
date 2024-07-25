@@ -68,8 +68,16 @@ Example YAML config file:
 
 import logging
 
-from yaml import safe_load, YAMLError
-from voluptuous import Required, Url, All, Length, Schema, MultipleInvalid, Invalid
+from voluptuous import (
+    All,
+    Invalid,
+    Length,
+    MultipleInvalid,
+    Required,
+    Schema,
+    Url,
+)
+from yaml import YAMLError, safe_load
 
 
 class ConfigError(Exception):
@@ -112,7 +120,10 @@ class Configurator:
     # the media type is allowed and the non-"e" version is not.
     MEDIA_TYPES = [
         {"configName": "book", "FacetName": "Book"},
-        {"configName": "electronic resource", "FacetName": "Electronic Resource"},
+        {
+            "configName": "electronic resource",
+            "FacetName": "Electronic Resource",
+        },
         {"configName": "ebook", "FacetName": "eBook"},
         {"configName": "eaudiobook", "FacetName": "eAudioBook"},
         {"configName": "book on cd", "FacetName": "Book on CD"},
@@ -148,7 +159,9 @@ class Configurator:
                     {
                         Required("firstname"): All(str, Length(min=1)),
                         Required("lastname"): All(str, Length(min=1)),
-                        "media-type": All(str, Configurator.validate_media_type),
+                        "media-type": All(
+                            str, Configurator.validate_media_type
+                        ),
                     }
                 ],
             }
@@ -210,7 +223,9 @@ class Configurator:
                         f"Config file '{self._filename}' not a valid YAML file:  {exc}"
                     ) from None
         except IOError as exc:
-            raise ConfigError(f"Config file '{self._filename}': {exc}") from None
+            raise ConfigError(
+                f"Config file '{self._filename}': {exc}"
+            ) from None
 
         # Validate the YAML content against the schema and return the
         # transformed content.

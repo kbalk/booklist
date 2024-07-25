@@ -3,7 +3,8 @@
 from textwrap import dedent
 
 from pytest import raises
-from booklist.config import Configurator, ConfigError
+
+from booklist.config import ConfigError, Configurator
 
 # pylint: disable=missing-docstring
 
@@ -55,9 +56,9 @@ def test_bad_yaml_format():
     config = Configurator("/etc/passwd")
     with raises(ConfigError) as excinfo:
         config.validate()
-    assert "expected a dictionary" in str(excinfo.value) or "No such file" in str(
+    assert "expected a dictionary" in str(
         excinfo.value
-    )
+    ) or "No such file" in str(excinfo.value)
 
 
 def test_extraneous_spaces(tmpdir):

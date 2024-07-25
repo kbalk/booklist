@@ -10,13 +10,13 @@ reponses are used to determine the number of publications meeting those
 filters and the list of publications.
 """
 
-from datetime import datetime
 import http.client as http_client
+import json
 import logging
+from datetime import datetime
 from time import gmtime, mktime
 from urllib.parse import urljoin
 
-import json
 import requests
 from voluptuous import Invalid
 
@@ -200,7 +200,9 @@ class CatalogSearch:
         try:
             decoded_data = response.json()
         except ValueError as exc:
-            raise CatalogSearchError(f"Bad JSON data in response:  {exc}") from None
+            raise CatalogSearchError(
+                f"Bad JSON data in response:  {exc}"
+            ) from None
 
         # One of the fields in the data is a 'success' indicator; check
         # that the value is true.
@@ -212,7 +214,9 @@ class CatalogSearch:
 
         # Return the other field in the data that indicates the total number
         # of available publications.
-        self.logger.debug(f"Expected number of matches:  {decoded_data['totalHits']}")
+        self.logger.debug(
+            f"Expected number of matches:  {decoded_data['totalHits']}"
+        )
         return decoded_data["totalHits"]
 
     def __publications(self, author, filter_list):
@@ -236,7 +240,9 @@ class CatalogSearch:
         try:
             decoded_data = response.json()
         except ValueError as exc:
-            raise CatalogSearchError(f"Bad JSON data in response:  {exc}") from None
+            raise CatalogSearchError(
+                f"Bad JSON data in response:  {exc}"
+            ) from None
 
         self.logger.debug(f"Decoded response from search:  {decoded_data}")
         return decoded_data["resources"]
@@ -300,7 +306,8 @@ class CatalogSearch:
         """
         if not author or not media_type:
             raise CatalogSearchError(
-                f"Arguments must be non-null:  author={author}, " f"media={media_type}"
+                f"Arguments must be non-null:  author={author}, "
+                f"media={media_type}"
             )
 
         # Media type one of the acceptable types?
@@ -315,7 +322,11 @@ class CatalogSearch:
         for year in ["unknown", self._year_filter]:
             filter_list = [
                 {"facetDisplay": year, "facetValue": year, "facetName": "Year"},
-                {"facetDisplay": media, "facetValue": media, "facetName": "Format"},
+                {
+                    "facetDisplay": media,
+                    "facetValue": media,
+                    "facetName": "Format",
+                },
             ]
 
             # Determine how many publications to expect so we know when
@@ -335,7 +346,9 @@ class CatalogSearch:
 
                 # Apply additional filters that can't be handled in the
                 # POST request.
-                self.__apply_local_filters(author, publications, filtered_results)
+                self.__apply_local_filters(
+                    author, publications, filtered_results
+                )
 
             # If we retrieve more publications than expected, raise an error.
             if accumulated_count > total_count:

@@ -45,8 +45,8 @@ import argparse
 import logging
 import sys
 
-from booklist.config import Configurator
 from booklist.catalog import CatalogSearch
+from booklist.config import Configurator
 
 
 def cmdline_parser():
@@ -67,10 +67,14 @@ def cmdline_parser():
     )
 
     parser.add_argument(
-        "config_file", help="Config file with library's catalog url and list of authors"
+        "config_file",
+        help="Config file with library's catalog url and list of authors",
     )
     parser.add_argument(
-        "-d", "--debug", action="store_true", help="Print debug information to stdout"
+        "-d",
+        "--debug",
+        action="store_true",
+        help="Print debug information to stdout",
     )
     return parser
 
