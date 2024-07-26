@@ -38,11 +38,30 @@ booklist = "booklist.main:main"
 Homepage = "https://github.com/kbalk/booklist"
 Repository = "https://github.com/kbalk/booklist"
 
+[tool.hatch.build.targets.sdist]
+include = [
+  "booklist/*.py",
+  "LICENSE",
+  "README.md",
+  "sample_config",
+  "/tests/*.py",
+]
+exclude = [
+  "my_config",
+]
+
 [tool.hatch.envs.hatch-static-analysis]
 dependencies = [
     "black",
     "isort",
     "pylint",
+
+    # With hatch, pylint is using a different python path and can't find
+    # dependencies installed with booklist.  Created ticket
+    # https://github.com/pypa/hatch/issues/1644 asking for a solution.
+    "pyYAML >= 6.0.2rc1",
+    "requests >= 2.32.3",
+    "voluptuous >= 0.15.2",
 ]
 
 [tool.hatch.envs.hatch-static-analysis.scripts]

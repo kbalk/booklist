@@ -220,7 +220,8 @@ class Configurator:
                     yaml_config = safe_load(fh_yamlfile)
                 except (YAMLError, TypeError) as exc:
                     raise ConfigError(
-                        f"Config file '{self._filename}' not a valid YAML file:  {exc}"
+                        f"Config file '{self._filename}' not a valid YAML "
+                        f"file:  {exc}"
                     ) from None
         except IOError as exc:
             raise ConfigError(

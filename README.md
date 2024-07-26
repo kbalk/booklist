@@ -48,15 +48,51 @@ This script was written using Python 3.7 and uses:
 * Requests
 
 
-### Unit tests
+### Development environment
 
-Unit tests can be invoked using Pytest:
+The `pyproject.toml` file is configured to use `hatch`.  `hatch` can be
+used to setup a virtual environment, run linters and formaters and the
+unit tests.  Install `hatch`, then create a virtual environment of your
+choice.
+
+Note:  It is not necessary to explicitly install the linters, formatters or
+test tools as those dependencies are specified in `pyproject.toml` and will
+be pulled in as required.
+
+To install `hatch`:
 
 ```sh
-pytest
+pip install hatch
+```
+
+Create an environment:
+
+```sh
+hatch env create
+```
+
+To lint and format code changes:
+
+```sh
+# Note:  there are issues using pylint with hatch that I'm still trying
+# to work out.  It may make more sense to run pylint directly.
+hatch fmt -l booklist
+
+# Check for potential formatting changes, but don't make them:
+hatch fmt -f --check booklist tests
+
+# Make necessary formatting changes:
+hatch fmt -f booklist tests
+```
+
+By default `hatch` uses `pytest` for unit tests:
+
+```sh
+# Run all unit tests:
+hatch test
 
 # Code coverage:
-pytest --cov=booklist
+hatch test --cover
 ```
 
 ## Configuration File
