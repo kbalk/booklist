@@ -52,8 +52,8 @@ This script was written using Python 3.7 and uses:
 
 The `pyproject.toml` file is configured to use `hatch`.  `hatch` can be
 used to setup a virtual environment, run linters and formaters and the
-unit tests.  Install `hatch`, then create a virtual environment of your
-choice.
+unit tests.  Install `hatch` (version 1.10.0 or greater), then create a
+virtual environment of your choice.
 
 Note:  It is not necessary to explicitly install the linters, formatters or
 test tools as those dependencies are specified in `pyproject.toml` and will
