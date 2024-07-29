@@ -40,7 +40,7 @@ library and authors of interest.  Refer to the
 
 ### Prerequisites
 
-This script was written using Python 3.7 and uses:
+This script requires Python 3.8 or newer, plus the following libraries:
 
 * Pytest
 * PyYAML
