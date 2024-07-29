@@ -14,14 +14,14 @@ a similar script written in Perl, but is designed to work with Horizon's
 Information Portal version 3.23_6380.
 
 `booklist` works by accessing a given library's website to search for
-publications from a given author, of a specific media type and within the
-current year.  The results are printed to the console.  The search is
-repeated for each author listed in a configuration file.
+publications from a given author filtered by a media type and publication
+date of the current year.  The results are printed to the console.  The
+search is repeated for each author listed in a configuration file.
 
 The configuration file is in YAML format and provides the library's
 catalog URL, default media type, authors and any specific media types
-for authors.  The publication time period includes publications with an
-unknown publication time as the unknown time might include the current year.
+for authors.  Note:  the publication time period includes those with
+an unknown publication time as that might include the current year.
 
 ## Installation
 
