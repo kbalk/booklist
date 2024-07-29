@@ -47,54 +47,6 @@ This script was written using Python 3.7 and uses:
 * Voluptuous (for validation of YAML data; see [Developer Notes](#developer-notes))
 * Requests
 
-
-### Development environment
-
-The `pyproject.toml` file is configured to use `hatch`.  `hatch` can be
-used to setup a virtual environment, run linters and formaters and the
-unit tests.  Install `hatch` (version 1.10.0 or greater), then create a
-virtual environment of your choice.
-
-Note:  It is not necessary to explicitly install the linters, formatters or
-test tools as those dependencies are specified in `pyproject.toml` and will
-be pulled in as required.
-
-To install `hatch`:
-
-```sh
-pip install hatch
-```
-
-Create an environment:
-
-```sh
-hatch env create
-```
-
-To lint and format code changes:
-
-```sh
-# Note:  there are issues using pylint with hatch that I'm still trying
-# to work out.  It may make more sense to run pylint directly.
-hatch fmt -l booklist
-
-# Check for potential formatting changes, but don't make them:
-hatch fmt -f --check booklist tests
-
-# Make necessary formatting changes:
-hatch fmt -f booklist tests
-```
-
-By default `hatch` uses `pytest` for unit tests:
-
-```sh
-# Run all unit tests:
-hatch test
-
-# Code coverage:
-hatch test --cover
-```
-
 ## Configuration File
 
 The name of the YAML-formatted configuration file is a required argument
@@ -176,7 +128,54 @@ filters and media it will permit.  Therefore this script may not work
 for any given CARL.X ILS, but it can be used as a starting point
 for any needed modifications.
 
-## Developer Notes
+## Development environment
+
+The `pyproject.toml` file is configured to use `hatch`.  `hatch` can be
+used to setup a virtual environment, run linters and formaters and the
+unit tests.  Install `hatch` (version 1.10.0 or greater), then create a
+virtual environment of your choice.
+
+Note:  It is not necessary to explicitly install the linters, formatters or
+test tools as those dependencies are specified in `pyproject.toml` and will
+be pulled in as required.
+
+To install `hatch`:
+
+```sh
+pip install hatch
+```
+
+Create an environment:
+
+```sh
+hatch env create
+```
+
+### Linting and formatting
+
+```sh
+# Note:  there are issues using pylint with hatch that I'm still trying
+# to work out.  It may make more sense to run pylint directly.
+hatch fmt -l booklist
+
+# Check for potential formatting changes, but don't make them:
+hatch fmt -f --check booklist tests
+
+# Make necessary formatting changes:
+hatch fmt -f booklist tests
+```
+
+By default `hatch` uses `pytest` for unit tests:
+
+```sh
+# Run all unit tests:
+hatch test
+
+# Code coverage:
+hatch test --cover
+```
+
+### Developer Notes
 
 The `Voluptuous` package is no longer maintained.  I researched some
 alternatives to YAML validation and `strictyaml` looked like a possibility.
